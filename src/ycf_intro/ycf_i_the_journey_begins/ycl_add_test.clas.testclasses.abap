@@ -10,55 +10,66 @@ private section.
 
     methods setup.
 
-    methods add_positives FOR TESTING RAISING cx_static_check.
-    methods add_negatives FOR TESTING RAISING cx_static_check.
-    methods add_pos_neg_eq_positive FOR TESTING RAISING cx_static_check.
-    methods add_pos_neg_eq_negative FOR TESTING RAISING cx_static_check.
+    methods add_p0_p1000 FOR TESTING RAISING cx_static_check.
+    methods add_p2_n39 FOR TESTING RAISING cx_static_check.
+    methods add_p99_p100 FOR TESTING RAISING cx_static_check.
+    methods add_n100_p100 FOR TESTING RAISING cx_static_check.
+    methods add_n1000_n1000 FOR TESTING RAISING cx_static_check.
 ENDCLASS.
 
 CLASS YCL_ADD_TEST_AU IMPLEMENTATION.
     method setup.
         "given
-        m_cut = new ycl_add_factory( )->create_object( |YCL_ADD_{ sy-uname }| ).
+        m_cut ?= new ycl_code_fight_factory( )->create_object( |YCL_ADD_{ sy-uname }| ).
     endmethod.
 
-    method add_positives.
+    method add_p0_p1000.
         "when
-        data(result) = m_cut->add( i_param1 = 2 i_param2 = 3 ).
+        data(result) = m_cut->add( i_param1 = 0 i_param2 = 1000 ).
 
         "then
         assert_equals(
             act = result
-            exp = 5 ).
+            exp = 1000 ).
     endmethod.
 
-    method add_negatives.
+    method add_p2_n39.
         "when
-        data(result) = m_cut->add( i_param1 = -2 i_param2 = -3 ).
+        data(result) = m_cut->add( i_param1 = 2 i_param2 = -39 ).
 
         "then
         assert_equals(
             act = result
-            exp = -5 ).
+            exp = -37 ).
     endmethod.
 
-    method add_pos_neg_eq_positive.
+    method add_p99_p100.
         "when
-        data(result) = m_cut->add( i_param1 = -2 i_param2 = 3 ).
+        data(result) = m_cut->add( i_param1 = 99 i_param2 = 100 ).
 
         "then
         assert_equals(
             act = result
-            exp = 1 ).
+            exp = 199 ).
     endmethod.
 
-    method add_pos_neg_eq_negative.
+    method add_n100_p100.
         "when
-        data(result) = m_cut->add( i_param1 = 2 i_param2 = -3 ).
+        data(result) = m_cut->add( i_param1 = -100 i_param2 = 100 ).
 
         "then
         assert_equals(
             act = result
-            exp = -1 ).
+            exp = 0 ).
+    endmethod.
+
+    method add_n1000_n1000.
+        "when
+        data(result) = m_cut->add( i_param1 = -1000 i_param2 = -1000 ).
+
+        "then
+        assert_equals(
+            act = result
+            exp = -2000 ).
     endmethod.
 ENDCLASS.
